@@ -1,0 +1,135 @@
+<!-- templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voice Recorder</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      body {
+        background-color: #f8f9fa; /* Light background color */
+      }
+
+      .container {
+        max-width: 800px; /* Limit the container width */
+        margin-top: 50px; /* Add some top margin */
+      }
+
+      .voice-recorder {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+      }
+
+      .controls {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      .timer {
+        font-size: 3rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #333;
+      }
+
+      .status-message {
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        padding: 20px;
+        margin-bottom: 20px;
+        white-space: pre-wrap;
+      }
+
+      .audio-player {
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      .audio-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-top: 10px;
+        text-align: center;
+        color: #007bff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="voice-recorder">
+        <h1 class="text-center">Voice Recorder</h1>
+        <div class="controls">
+          <button class="btn btn-primary" id="start">Start Recording</button>
+          <button class="btn btn-danger" id="stop" disabled>
+            Stop Recording
+          </button>
+        </div>
+        <div class="timer" id="timer">00:00</div>
+        <div class="status-message" id="transcription"></div>
+        <div class="audio-player">
+          <audio id="audio-player" controls style="display: none"></audio>
+          <div class="audio-title" id="audio-title"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let timerInterval;
+      let seconds = 0;
+
+      function formatTime(sec) {
+        const minutes = Math.floor(sec / 60);
+        const remainingSeconds = sec % 60;
+        return `${String(minutes).padStart(2, "0")}:${String(
+          remainingSeconds
+        ).padStart(2, "0")}`;
+      }
+
+      $(document).ready(function () {
+        $("#start").click(function () {
+          $("#timer").text("00:00");
+          seconds = 0;
+          timerInterval = setInterval(() => {
+            seconds++;
+            $("#timer").text(formatTime(seconds));
+          }, 1000);
+
+          $.post("/start_recording", function (response) {
+            console.log(response.status);
+          }).fail(function () {
+            alert("Error starting recording.");
+          });
+
+          $("#start").prop("disabled", true);
+          $("#stop").prop("disabled", false);
+        });
+
+        $("#stop").click(function () {
+          clearInterval(timerInterval);
+
+          $.post("/stop_recording", function (response) {
+            $("#transcription").text(response.transcription);
+            $("#audio-player").attr("src", response.audio_file).show();
+            $("#audio-title").text("Audio Track");
+            console.log(response.status);
+          }).fail(function () {
+            alert("Error stopping recording or transcribing.");
+          });
+
+          $("#start").prop("disabled", false);
+          $("#stop").prop("disabled", true);
+        });
+      });
+    </script>
+  </body>
+</html>
