@@ -173,6 +173,14 @@ SamvaadSetu/
 
 ---
 
+![](/media/natalie/D-Drive/VS-Code/SamvaadSetu/images/1747319430847.jpeg) 
+
+![](/media/natalie/D-Drive/VS-Code/SamvaadSetu/images/1747319440017.gif)
+
+![](/home/natalie/VS-Code/SamvaadSetu/images/1747319431424.jpeg)
+
+![](/home/natalie/VS-Code/SamvaadSetu/images/1747319431178.jpeg)
+
 ## 📝 License
 
 This project is licensed under the [MIT License](LICENSE).
