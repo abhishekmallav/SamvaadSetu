@@ -185,4 +185,5 @@ This project is licensed under the [MIT License](LICENSE).
 
 Let me know if you want to add anything specific or need a section tailored further!
 
-***<a href=”https://www.linkedin.com/in/abhishekmallav/"><img align=”left” src=”https://github.com/abhishekmallav/SamvaadSetu/blob/main/static/images/linkedin.svg" alt=”Yu Shi | LinkedIn” width=”21px”/></a>***
+[![text](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/abhishekmallav)
+
