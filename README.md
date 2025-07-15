@@ -144,6 +144,15 @@ SamvaadSetu/
    ```
 
 ---
+![](https://github.com/abhishekmallav/SamvaadSetu/blob/main/images/1747319430847.jpeg) 
+
+![](https://github.com/abhishekmallav/SamvaadSetu/blob/main/images/1747319440017.gif#center)
+
+![](https://github.com/abhishekmallav/SamvaadSetu/blob/main/images/1747319431424.jpeg)
+
+![](https://github.com/abhishekmallav/SamvaadSetu/blob/main/images/1747319431178.jpeg)
+
+---
 
 ## 📈 Future Scope
 
@@ -154,7 +163,6 @@ SamvaadSetu/
 - **Mobile App:** Practice and feedback on the go
 - **API Development:** Integration with other platforms
 - **Collaborative Features:** Group practice and peer feedback
-
 ---
 
 ## 📚 References
@@ -173,14 +181,6 @@ SamvaadSetu/
 
 ---
 
-![](/media/natalie/D-Drive/VS-Code/SamvaadSetu/images/1747319430847.jpeg) 
-
-<img src="file:///media/natalie/D-Drive/VS-Code/SamvaadSetu/images/1747319440017.gif" title="" alt="" data-align="center">
-
-![](/home/natalie/VS-Code/SamvaadSetu/images/1747319431424.jpeg)
-
-![](/home/natalie/VS-Code/SamvaadSetu/images/1747319431178.jpeg)
-
 ## 📝 License
 
 This project is licensed under the [MIT License](LICENSE).
@@ -188,8 +188,6 @@ This project is licensed under the [MIT License](LICENSE).
 ---
 
 ## **Empower your voice with SamvaadSetu!** 🎤✨
-
----
 
 Let me know if you want to add anything specific or need a section tailored further!
 
