@@ -185,7 +185,11 @@ SamvaadSetu/
 
 This project is licensed under the [MIT License](LICENSE).
 
----
+
+## Author
+
+Created by [abhishekmallav](https://github.com/abhishekmallav), [09Namratakhade](https://github.com/09Namratakhade), [PrashantTakale369](https://github.com/PrashantTakale369)
+
 
 ## **Empower your voice with SamvaadSetu!** 🎤✨
 
