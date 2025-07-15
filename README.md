@@ -185,4 +185,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 Let me know if you want to add anything specific or need a section tailored further!
 
-***<a href=”https://www.linkedin.com/in/yushi95/"><img align=”left” src=”https://raw.githubusercontent.com/yushi1007/yushi1007/main/images/linkedin.svg" alt=”Yu Shi | LinkedIn” width=”21px”/></a>***
+***<a href=”https://www.linkedin.com/in/abhishekmallav/"><img align=”left” src=”https://github.com/abhishekmallav/SamvaadSetu/blob/main/static/images/linkedin.svg" alt=”Yu Shi | LinkedIn” width=”21px”/></a>***
