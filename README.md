@@ -52,12 +52,17 @@ By analyzing both verbal and non-verbal communication in real time, SamvaadSetu 
 ## 🧑‍💻 Usage Guide
 
 1. **Start the Application**
+   
    ```bash
    python app.py
    ```
+
 2. **Access the Web Interface**
+   
    - Open your browser at `http://localhost:5000`.
+
 3. **Begin Your Session**
+   
    - 🎤 Speak or present as you normally would.
    - 👀 The system tracks gestures, posture, and facial expressions.
    - 📝 Receive instant, actionable feedback on your delivery.
@@ -88,42 +93,52 @@ SamvaadSetu/
 
 ## 🔗 API Endpoints
 
-| Endpoint            | Method | Description                                     |
-|---------------------|--------|-------------------------------------------------|
-| `/`                 | GET    | Serves main recording interface                 |
-| `/save_video`       | POST   | Receives and processes recordings               |
-| `/video`            | GET    | Serves latest processed video                   |
-| `/report`           | GET    | Returns latest posture report                   |
-| `/transcript`       | GET    | Returns latest speech transcript                |
-| `/analysis`         | GET    | Returns latest speech analysis                  |
-| `/combined_report`  | GET    | Returns all analysis components                 |
-| `/playback`         | GET    | Serves playback interface                       |
-| `/analyze_report`   | POST   | Triggers AI enhancement of analysis             |
-| `/llm_response`     | GET    | Provides latest enhanced AI feedback            |
+| Endpoint           | Method | Description                          |
+| ------------------ | ------ | ------------------------------------ |
+| `/`                | GET    | Serves main recording interface      |
+| `/save_video`      | POST   | Receives and processes recordings    |
+| `/video`           | GET    | Serves latest processed video        |
+| `/report`          | GET    | Returns latest posture report        |
+| `/transcript`      | GET    | Returns latest speech transcript     |
+| `/analysis`        | GET    | Returns latest speech analysis       |
+| `/combined_report` | GET    | Returns all analysis components      |
+| `/playback`        | GET    | Serves playback interface            |
+| `/analyze_report`  | POST   | Triggers AI enhancement of analysis  |
+| `/llm_response`    | GET    | Provides latest enhanced AI feedback |
 
 ---
 
 ## ⚙️ Installation Guide
 
 1. **Clone the repository**
+   
    ```bash
    git clone https://github.com/abhishekmallav/SamvaadSetu.git
    cd SamvaadSetu
    ```
+
 2. **Create a virtual environment**
+   
    ```bash
    python -m venv venv
    ```
+
 3. **Activate your virtual environment**
+   
    - On **Windows**:
+     
      ```bash
      venv\Scripts\activate
      ```
+   
    - On **Mac/Linux**:
+     
      ```bash
      source venv/bin/activate
      ```
+
 4. **Install required packages**
+   
    ```bash
    pip install -r requirements.txt
    ```
@@ -158,7 +173,6 @@ SamvaadSetu/
 
 ---
 
-
 ## 📝 License
 
 This project is licensed under the [MIT License](LICENSE).
@@ -170,3 +184,5 @@ This project is licensed under the [MIT License](LICENSE).
 ---
 
 Let me know if you want to add anything specific or need a section tailored further!
+
+***<a href=”https://www.linkedin.com/in/yushi95/"><img align=”left” src=”https://raw.githubusercontent.com/yushi1007/yushi1007/main/images/linkedin.svg" alt=”Yu Shi | LinkedIn” width=”21px”/></a>***
