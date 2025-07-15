@@ -156,6 +156,15 @@ SamvaadSetu/
 - **Collaborative Features:** Group practice and peer feedback
 
 ---
+![](https://github.com/abhishekmallav/SamvaadSetu/blob/main/images/1747319430847.jpeg) 
+
+![](https://github.com/abhishekmallav/SamvaadSetu/blob/main/images/1747319440017.gif)
+
+![](https://github.com/abhishekmallav/SamvaadSetu/blob/main/images/1747319431424.jpeg)
+
+![](https://github.com/abhishekmallav/SamvaadSetu/blob/main/images/1747319431178.jpeg)
+
+---
 
 ## 📚 References
 
@@ -173,14 +182,6 @@ SamvaadSetu/
 
 ---
 
-![](/media/natalie/D-Drive/VS-Code/SamvaadSetu/images/1747319430847.jpeg) 
-
-![](/media/natalie/D-Drive/VS-Code/SamvaadSetu/images/1747319440017.gif)
-
-![](/home/natalie/VS-Code/SamvaadSetu/images/1747319431424.jpeg)
-
-![](/home/natalie/VS-Code/SamvaadSetu/images/1747319431178.jpeg)
-
 ## 📝 License
 
 This project is licensed under the [MIT License](LICENSE).
@@ -189,7 +190,6 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## **Empower your voice with SamvaadSetu!** 🎤✨
 
----
 
 Let me know if you want to add anything specific or need a section tailored further!
 
