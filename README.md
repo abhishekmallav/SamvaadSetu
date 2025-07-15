@@ -1,7 +1,3 @@
-Absolutely! Here’s a visually appealing, easy-to-read documentation for **SamvaadSetu** in Markdown, complete with emojis, bullet points, and well-structured sections:
-
----
-
 # ✨ SamvaadSetu
 
 > **AI Powered Communication and Presentation Coach**
@@ -10,23 +6,104 @@ Absolutely! Here’s a visually appealing, easy-to-read documentation for **Samv
 
 ## 🚀 Overview
 
-**SamvaadSetu** is an AI-powered, web-based system engineered to provide real-time, holistic feedback on both verbal and non-verbal communication.  
-It’s designed to help speakers become more confident, self-aware, and impactful communicators!
+**SamvaadSetu** is an innovative, AI-powered, web-based system designed to transform speakers into confident, self-aware, and impactful communicators.  
+By analyzing both verbal and non-verbal communication in real time, SamvaadSetu provides instant, holistic, and adaptive feedback to help users elevate their speaking skills.
+
+---
+
+## 🎯 What Makes SamvaadSetu Unique?
+
+- **Multimodal Integration:** Combines audio, video, and text to deliver a complete analysis of communication style.
+- **Accessibility & Inclusivity:** Tailored for marginalized communities, individuals with disabilities, non-native speakers, and anyone seeking affordable, personalized coaching.
+- **Scenario-Based Training:** Practice in real-world contexts like interviews, presentations, and team discussions.
+- **Comprehensive Feedback:** Integrates posture tracking, speech metrics, grammar correction, emotional and sentiment analysis, and facial expression recognition.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- 🤖 **Mediapipe**: Precise gesture and face tracking  
-- 🗣️ **STT API (Deepgram)**: Highly accurate speech transcription  
-- ✍️ **LanguageTool**: Robust grammar checks  
-- 🧠 **Large Language Models (Gemini)**: In-depth emotional and summary analysis  
+- 🤖 **Mediapipe**: Gesture, posture, and face tracking
+- 🗣️ **Deepgram STT API**: Speech-to-text transcription
+- ✍️ **LanguageTool**: Grammar checks
+- 🧠 **Google Gemini (LLM)**: Emotional analysis, sentiment summarization, and enhanced feedback
+- 🐍 **Python & Flask**: Backend logic and web server
+- 🎞️ **ffmpeg**: Video/audio processing and conversion
+- 🏷️ **NLTK**: Text analysis and sentence tokenization
+- 📄 **Markdown**: Displaying formatted feedback
+
+---
+
+## 🎉 Features
+
+- **Speech Transcription:** Converts spoken words into text
+- **Grammar Correction:** Identifies and suggests improvements for grammatical errors
+- **Facial Expression Recognition:** Analyzes emotions conveyed through facial cues
+- **Hand Gesture & Posture Analysis:** Evaluates body language for effectiveness
+- **Sentiment Summarization:** Provides an overview of emotional tone
+- **Real-Time Feedback:** On both verbal and non-verbal communication
+- **Filler Word & Pause Detection:** Highlights habits and helps reduce usage
+- **Scenario-Based Training:** Simulates real-life communication challenges
+- **Comprehensive Reporting:** Unified feedback integrating all analysis aspects
+- **Playback & Review:** Watch recordings with synchronized feedback overlays
+- **Inclusivity:** Adaptive interfaces and feedback for diverse user needs
+
+---
+
+## 🧑‍💻 Usage Guide
+
+1. **Start the Application**
+   ```bash
+   python app.py
+   ```
+2. **Access the Web Interface**
+   - Open your browser at `http://localhost:5000`.
+3. **Begin Your Session**
+   - 🎤 Speak or present as you normally would.
+   - 👀 The system tracks gestures, posture, and facial expressions.
+   - 📝 Receive instant, actionable feedback on your delivery.
+   - 📊 Review your performance with comprehensive, AI-generated reports.
+
+---
+
+## 📂 Folder Structure
+
+```
+SamvaadSetu/
+├── app.py
+├── requirements.txt
+├── static/
+│   └── (HTML/CSS/JS files)
+├── templates/
+│   └── (Web templates)
+├── videos/
+├── posture/
+├── transcripts/
+├── analysis/
+├── reports/
+├── LLM/
+└── README.md
+```
+
+---
+
+## 🔗 API Endpoints
+
+| Endpoint            | Method | Description                                     |
+|---------------------|--------|-------------------------------------------------|
+| `/`                 | GET    | Serves main recording interface                 |
+| `/save_video`       | POST   | Receives and processes recordings               |
+| `/video`            | GET    | Serves latest processed video                   |
+| `/report`           | GET    | Returns latest posture report                   |
+| `/transcript`       | GET    | Returns latest speech transcript                |
+| `/analysis`         | GET    | Returns latest speech analysis                  |
+| `/combined_report`  | GET    | Returns all analysis components                 |
+| `/playback`         | GET    | Serves playback interface                       |
+| `/analyze_report`   | POST   | Triggers AI enhancement of analysis             |
+| `/llm_response`     | GET    | Provides latest enhanced AI feedback            |
 
 ---
 
 ## ⚙️ Installation Guide
-
-Get started with SamvaadSetu in just a few steps!
 
 1. **Clone the repository**
    ```bash
@@ -53,62 +130,34 @@ Get started with SamvaadSetu in just a few steps!
 
 ---
 
-## 🧑‍💻 Usage Guide
+## 📈 Future Scope
 
-Ready to transform your communication skills? Here’s how to use SamvaadSetu:
-
-1. **Start the application**  
-   (Refer to project documentation or run your main Python script, e.g.)
-   ```bash
-   python app.py
-   ```
-2. **Access the web interface**  
-   Open your browser and go to the provided local URL (typically `http://localhost:5000`).
-3. **Begin your session!**
-   - 🎤 Speak or present as you normally would.
-   - 👀 The system will track your gestures and facial expressions.
-   - 📝 Receive real-time feedback on your verbal delivery and non-verbal cues.
-   - 🧑‍🏫 Get grammar corrections, emotional analysis, and presentation summaries.
+- **Advanced AI Feedback:** Deeper, context-aware analysis and recommendations
+- **Multilingual Support:** Feedback in multiple languages
+- **VR/AR Integration:** Immersive practice environments
+- **Industry Modules:** Legal, medical, technical, and more
+- **Mobile App:** Practice and feedback on the go
+- **API Development:** Integration with other platforms
+- **Collaborative Features:** Group practice and peer feedback
 
 ---
 
-## 🎉 Features
+## 📚 References
 
-- Real-time feedback on **verbal and non-verbal communication**
-- Accurate **speech transcription**
-- Automatic **grammar correction**
-- **Gesture and face tracking**
-- **Emotional analysis** and presentation summary
-
----
-
-## 📂 Folder Structure
-
-```
-SamvaadSetu/
-├── app.py
-├── requirements.txt
-├── static/
-│   └── (HTML/CSS/JS files)
-├── templates/
-│   └── (Web templates)
-└── README.md
-```
+- American Psychological Association 
+- World Economic Forum
+- MIT Technology Review
+- Harvard Business Review
+- IEEE Transactions on Affective Computing
+- Flask Documentation
+- MediaPipe
+- Deepgram
+- Google Gemini
+- NLTK
+- LanguageTool
 
 ---
 
-## 🤝 Contributing
-
-Want to make SamvaadSetu even better?  
-Check out our [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines and open a Pull Request! 🚀
-
----
-
-## 📞 Support & Contact
-
-For questions or feedback, open an [issue](https://github.com/abhishekmallav/SamvaadSetu/issues) or reach out via email listed in the repo.
-
----
 
 ## 📝 License
 
@@ -116,7 +165,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-**Happy Communicating!** 🎤✨
+## **Empower your voice with SamvaadSetu!** 🎤✨
 
 ---
 
