@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Analysis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/playback.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="header">
+        <div class="header-logo">
+          <img
+            src="/static/images/logo.png"
+            alt="SamvaadSetu Logo"
+            class="logo-image"
+          />
+          <a href="{{ url_for('index') }}">SamvaadSetu</a>
+        </div>
+        <div class="header-menu">
+          <a href="{{ url_for('index') }}"> Home</a>
+          <a href="{{ url_for('about') }}">About Us</a>
+
+          <a href="{{ url_for('playback') }}">
+            <p id="insights">
+              <i class="fa-duotone fa-solid fa-chart-simple"></i> Insights
+            </p>
+          </a>
+        </div>
+      </div>
+
+      <div id="videoplayer-speech-posture-container">
+        <div id="video-button-container">
+          <div id="video-container">
+            <video id="playbackVideo" controls>
+              <source id="videoSource" src="/video?t=" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+
+          <div id="button-container">
+            <br />
+            <button onclick="window.location.href='/practise'">
+              Record Again
+            </button>
+            <button id="analyzeBtn">Get Analysis</button>
+          </div>
+        </div>
+
+        <div id="speech-posture-container">
+          <div class="speech-analysis-container" id="analysisContainer">
+            <h2>Speech Analysis</h2>
+            <div id="analysisLoading">Loading speech analysis data...</div>
+            <div id="analysisContent" style="display: none">
+              <div class="summary-stats" id="speechStats"></div>
+              <div class="tabs">
+                <div class="tab active" onclick="switchTab('fillerWords')">
+                  Filler Words
+                </div>
+                <div class="tab" onclick="switchTab('pauses')">Pauses</div>
+                <div class="tab" onclick="switchTab('grammar')">Grammar</div>
+              </div>
+              <div id="fillerWords" class="tab-content active">
+                <div class="metric-card">
+                  <div class="metric-title">Filler Word Analysis</div>
+                  <div id="fillerWordSummary"></div>
+                  <div class="metric-breakdown" id="fillerWordBreakdown"></div>
+                </div>
+              </div>
+              <div id="pauses" class="tab-content">
+                <div class="metric-card">
+                  <div class="metric-title">Pause Analysis</div>
+                  <div id="pauseSummary"></div>
+                  <div class="metric-breakdown" id="pauseBreakdown"></div>
+                </div>
+              </div>
+              <div id="grammar" class="tab-content">
+                <div class="metric-card">
+                  <div class="metric-title">Grammar Error Analysis</div>
+                  <div id="grammarSummary"></div>
+                  <div class="metric-breakdown" id="grammarBreakdown"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="posture-analysis-container" id="reportContainer">
+            <h2>Posture Analysis</h2>
+            <div id="loading">Loading report data...</div>
+            <div id="reportContent" style="display: none">
+              <div class="summary-stats" id="summaryStats"></div>
+              <h3>Posture Timeline</h3>
+              <div class="timeline" id="postureTimeline"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="timeline-transcript-container">
+        <div class="timeline-breakdown-container">
+          <h3>Second-by-Second Breakdown</h3>
+          <div style="max-height: 400px; overflow-y: auto">
+            <table id="secondBySecondTable">
+              <thead>
+                <tr>
+                  <th>Second</th>
+                  <th>Posture</th>
+                  <th>Confidence</th>
+                  <th>Good %</th>
+                  <th>Okay %</th>
+                  <th>Bad %</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="transcript-container" id="transcriptContainer">
+          <h2>Speech Transcript</h2>
+          <div id="transcriptLoading">Loading transcript data...</div>
+          <div id="transcriptContent" style="display: none">
+            <p id="transcriptMetadata"></p>
+            <div class="transcript-text" id="transcriptText"></div>
+            <div style="margin-top: 15px">
+              <h3>Word-by-Word Breakdown</h3>
+              <div
+                class="transcript-with-timestamps"
+                id="detailedTranscript"
+                style="max-height: 300px; overflow-y: auto"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="llm-response-container">
+        <h2>Analysis Results</h2>
+        <div id="summary"></div>
+        <div id="sentiment"></div>
+        <div id="enhancedTranscript"></div>
+      </div>
+      <div class="footer">
+        <p>&copy; 2025 SamvaadSetu. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="{{ url_for('about') }}">About</a>
+          <a href="{{ url_for('contact') }}">Contact</a>
+          <a href="{{ url_for('terms') }}">Terms of Service</a>
+          <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+          <a href="{{ url_for('support') }}">Support</a>
+          <a href="{{ url_for('faqs') }}">FAQs</a>
+          <a href="{{ url_for('careers') }}">Careers</a>
+        </div>
+      </div>
+    </div>
+    <script>
+      function displayAnalysisResults(data) {
+        document.getElementById("summary").innerHTML = data.summary;
+        document.getElementById("sentiment").innerHTML = data.sentiment;
+        document.getElementById("enhancedTranscript").innerHTML =
+          data.enhanced_transcript;
+        document.getElementById("llm-response-container").style.display =
+          "block";
+      }
+
+      function fetchAndDisplayLLMResponse() {
+        fetch("/llm_response?t=" + new Date().getTime())
+          .then((response) => {
+            if (!response.ok) {
+              if (response.status === 404) {
+                document.getElementById(
+                  "llm-response-container"
+                ).style.display = "none";
+              } else {
+                throw new Error("Failed to load LLM response");
+              }
+            } else {
+              return response.json();
+            }
+          })
+          .then((data) => {
+            if (data.error) {
+              document.getElementById("llm-response-container").style.display =
+                "none";
+            } else {
+              displayAnalysisResults(data);
+            }
+          })
+          .catch((error) => {
+            console.error("Error loading LLM response:", error);
+            document.getElementById("llm-response-container").style.display =
+              "none";
+          });
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        let videoElement = document.getElementById("videoSource");
+        videoElement.src = "/video?t=" + new Date().getTime();
+        document.getElementById("playbackVideo").load();
+
+        fetch("/report?t=" + new Date().getTime())
+          .then((response) => {
+            if (!response.ok) throw new Error("Failed to load report");
+            return response.json();
+          })
+          .then(displayReport)
+          .catch((error) => {
+            console.error("Error loading report:", error);
+            document.getElementById("loading").textContent =
+              "Failed to load report.";
+          });
+
+        fetch("/transcript?t=" + new Date().getTime())
+          .then((response) => {
+            if (!response.ok) throw new Error("Failed to load transcript");
+            return response.json();
+          })
+          .then(displayTranscript)
+          .catch((error) => {
+            console.error("Error loading transcript:", error);
+            document.getElementById("transcriptLoading").textContent =
+              "Failed to load transcript.";
+          });
+
+        fetch("/analysis?t=" + new Date().getTime())
+          .then((response) => {
+            if (!response.ok) throw new Error("Failed to load analysis");
+            return response.json();
+          })
+          .then(displayAnalysis)
+          .catch((error) => {
+            console.error("Error loading analysis:", error);
+            document.getElementById("analysisLoading").textContent =
+              "Failed to load speech analysis.";
+          });
+
+        fetchAndDisplayLLMResponse();
+
+        document
+          .getElementById("analyzeBtn")
+          .addEventListener("click", async () => {
+            try {
+              const response = await fetch("/analyze_report", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+              });
+              if (!response.ok) throw new Error("Failed to get analysis");
+              const data = await response.json();
+              displayAnalysisResults(data);
+            } catch (error) {
+              console.error("Error getting analysis:", error);
+              document.getElementById("llm-response-container").innerHTML =
+                "Failed to get analysis.";
+            }
+          });
+      });
+
+      function displayReport(data) {
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("reportContent").style.display = "block";
+        const summaryDiv = document.getElementById("summaryStats");
+        summaryDiv.innerHTML = `
+          <div class="stat-box"><h3>Total Time</h3><p>${data.summary.totalTime} seconds</p></div>
+          <div class="stat-box"><h3>Good Posture</h3><p class="good">${data.summary.goodPercentage}%</p><p>${data.summary.goodTime} seconds</p></div>
+          <div class="stat-box"><h3>Okay Posture</h3><p class="okay">${data.summary.okayPercentage}%</p><p>${data.summary.okayTime} seconds</p></div>
+          <div class="stat-box"><h3>Bad Posture</h3><p class="bad">${data.summary.badPercentage}%</p><p>${data.summary.badTime} seconds</p></div>
+          <div class="stat-box"><h3>Avg. Confidence</h3><p>${data.summary.averageConfidence}</p></div>
+        `;
+        const timeline = document.getElementById("postureTimeline");
+        const totalSeconds = data.recordingTime;
+        if (totalSeconds > 0) {
+          const secondWidth = timeline.offsetWidth / totalSeconds;
+          Object.keys(data.secondBySecond).forEach((second) => {
+            const posture = data.secondBySecond[second].dominantPosture;
+            const segment = document.createElement("div");
+            segment.className = `timeline-segment ${posture}-segment`;
+            segment.style.left = `${(parseInt(second) / totalSeconds) * 100}%`;
+            segment.style.width = `${secondWidth}px`;
+            segment.title = `Second ${second}: ${posture} posture`;
+            timeline.appendChild(segment);
+          });
+        }
+        const tableBody = document.getElementById("tableBody");
+        Object.keys(data.secondBySecond)
+          .sort((a, b) => parseInt(a) - parseInt(b))
+          .forEach((second) => {
+            const secondData = data.secondBySecond[second];
+            const row = document.createElement("tr");
+            row.className = secondData.dominantPosture;
+            row.innerHTML = `
+            <td>${second}</td>
+            <td class="${secondData.dominantPosture}">${secondData.dominantPosture}</td>
+            <td>${secondData.confidenceAvg}</td>
+            <td>${secondData.postureBreakdown.good}%</td>
+            <td>${secondData.postureBreakdown.okay}%</td>
+            <td>${secondData.postureBreakdown.bad}%</td>
+          `;
+            tableBody.appendChild(row);
+          });
+      }
+
+      function displayTranscript(data) {
+        document.getElementById("transcriptLoading").style.display = "none";
+        document.getElementById("transcriptContent").style.display = "block";
+        if (
+          !data.results ||
+          !data.results.channels ||
+          !data.results.channels.length
+        ) {
+          document.getElementById("transcriptText").innerHTML =
+            "No transcript data available.";
+          return;
+        }
+        const channel = data.results.channels[0];
+        const alternative = channel.alternatives[0];
+        const transcript = alternative.transcript;
+        const confidence = (alternative.confidence * 100).toFixed(1);
+        document.getElementById(
+          "transcriptMetadata"
+        ).innerHTML = `Speech detected with ${confidence}% confidence`;
+        document.getElementById("transcriptText").innerHTML =
+          transcript || "No transcript available.";
+        const detailedTranscriptDiv =
+          document.getElementById("detailedTranscript");
+        if (alternative.words && alternative.words.length > 0) {
+          let transcriptHtml = "";
+          alternative.words.forEach((word, index) => {
+            const startTime = formatTimestamp(word.start);
+            transcriptHtml += `<span class="timestamp">[${startTime}]</span> ${word.word} `;
+            if ((index + 1) % 10 === 0) transcriptHtml += "<br>";
+          });
+          detailedTranscriptDiv.innerHTML = transcriptHtml;
+        } else {
+          detailedTranscriptDiv.innerHTML =
+            "No word-level timestamps available.";
+        }
+      }
+
+      function displayAnalysis(data) {
+        if (data.error) {
+          document.getElementById("analysisLoading").textContent =
+            "Error: " + data.error;
+          return;
+        }
+        document.getElementById("analysisLoading").style.display = "none";
+        document.getElementById("analysisContent").style.display = "block";
+        const wpmCategory =
+          data.words_per_minute < 120
+            ? "Slow"
+            : data.words_per_minute <= 160
+            ? "Moderate"
+            : data.words_per_minute <= 200
+            ? "Fast"
+            : "Very Fast";
+        document.getElementById("speechStats").innerHTML = `
+          <div class="stat-box"><h3>Duration</h3><p>${data.duration_seconds} seconds</p></div>
+          <div class="stat-box"><h3>Word Count</h3><p>${data.word_count}</p></div>
+          <div class="stat-box"><h3>Words Per Minute</h3><p>${data.words_per_minute} (${wpmCategory})</p></div>
+          <div class="stat-box"><h3>Filler Words</h3><p>${data.filler_words.total_count}</p></div>
+          <div class="stat-box"><h3>Pauses</h3><p>${data.pauses.count}</p></div>
+          <div class="stat-box"><h3>Grammar Errors</h3><p>${data.grammar_errors.count}</p></div>
+        `;
+        document.getElementById("fillerWordSummary").innerHTML = `
+          <div class="metric-value">${data.filler_words.total_count}</div>
+          <div class="metric-description">Total filler words used</div>
+        `;
+        const fillerWordBreakdown = document.getElementById(
+          "fillerWordBreakdown"
+        );
+        fillerWordBreakdown.innerHTML = "";
+        for (const [word, count] of Object.entries(
+          data.filler_words.breakdown
+        )) {
+          const tag = document.createElement("span");
+          tag.className = "tag";
+          tag.innerHTML = `${word}<span class="count">${count}</span>`;
+          fillerWordBreakdown.appendChild(tag);
+        }
+        document.getElementById("pauseSummary").innerHTML = `
+          <div class="metric-value">${data.pauses.count}</div>
+          <div class="metric-description">Total pauses detected</div>
+          <div class="metric-description">Total pause duration: ${data.pauses.total_duration} seconds</div>
+          <div class="metric-description">Average pause duration: ${data.pauses.average_duration} seconds</div>
+        `;
+        const pauseBreakdown = document.getElementById("pauseBreakdown");
+        pauseBreakdown.innerHTML = "";
+        data.pauses.details.forEach((pause) => {
+          const pauseItem = document.createElement("div");
+          pauseItem.className = "pause-marker";
+          pauseItem.innerHTML = `Pause of ${pause.duration.toFixed(
+            2
+          )}s between "${pause.previous_word}" and "${pause.next_word}"`;
+          pauseBreakdown.appendChild(pauseItem);
+        });
+        document.getElementById("grammarSummary").innerHTML = `
+          <div class="metric-value">${data.grammar_errors.count}</div>
+          <div class="metric-description">Total grammar errors detected</div>
+        `;
+        const grammarBreakdown = document.getElementById("grammarBreakdown");
+        grammarBreakdown.innerHTML = "";
+        data.grammar_errors.details.forEach((error) => {
+          const errorItem = document.createElement("div");
+          errorItem.className = "grammar-error";
+          errorItem.innerHTML = `
+            <span>${error.context}</span>
+            <div class="grammar-error-tooltip">
+              <strong>Error:</strong> ${error.error}<br>
+              <strong>Suggestions:</strong> ${
+                error.suggestions.join(", ") || "None"
+              }
+            </div>
+          `;
+          grammarBreakdown.appendChild(errorItem);
+        });
+      }
+
+      function switchTab(tabName) {
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((content) => content.classList.remove("active"));
+        document
+          .querySelectorAll(".tab")
+          .forEach((tab) => tab.classList.remove("active"));
+        document.getElementById(tabName).classList.add("active");
+        document
+          .querySelector(`.tab[onclick="switchTab('${tabName}')"]`)
+          .classList.add("active");
+      }
+
+      function formatTimestamp(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = Math.floor(seconds % 60);
+        const milliseconds = Math.floor((seconds - Math.floor(seconds)) * 1000);
+        return `${minutes.toString().padStart(2, "0")}:${remainingSeconds
+          .toString()
+          .padStart(2, "0")}.${milliseconds.toString().padStart(3, "0")}`;
+      }
+    </script>
+  </body>
+</html>

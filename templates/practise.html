@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practise</title>
+    <!-- MediaPipe Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/practise.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="header">
+        <div class="header-logo">
+          <img
+            src="/static/images/logo.png"
+            alt="SamvaadSetu Logo"
+            class="logo-image"
+          />
+          <a href="{{ url_for('index') }}">SamvaadSetu</a>
+        </div>
+        <div class="header-menu">
+          <a href="{{ url_for('index') }}"> Home</a>
+          <a href="{{ url_for('about') }}">About Us</a>
+          <a href="{{ url_for('playback') }}">
+            <p id="insights">
+              <i class="fa-duotone fa-solid fa-chart-simple"></i> Insights
+            </p>
+          </a>
+        </div>
+      </div>
+      <div class="container">
+        <div class="video-container">
+          <video
+            id="videoElement"
+            width="900"
+            height="520"
+            autoplay
+            muted
+          ></video>
+          <canvas
+            id="overlayCanvas"
+            width="900"
+            height="500"
+            style="position: absolute; top: 0; left: 0; pointer-events: none"
+          ></canvas>
+        </div>
+        <div id="controls">
+          <div id="recording-status">
+            <p id="status">Not Recording</p>
+          </div>
+          <button id="startPauseBtn">Start</button>
+          <button id="stopBtn" disabled>Stop</button>
+          <button id="startAgainBtn">Start Again</button>
+        </div>
+      </div>
+      <div class="footer">
+        <p>&copy; 2025 SamvaadSetu. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="{{ url_for('about') }}">About</a>
+          <a href="{{ url_for('contact') }}">Contact</a>
+          <a href="{{ url_for('terms') }}">Terms of Service</a>
+          <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+          <a href="{{ url_for('support') }}">Support</a>
+          <a href="{{ url_for('faqs') }}">FAQs</a>
+          <a href="{{ url_for('careers') }}">Careers</a>
+        </div>
+      </div>
+      <canvas
+        id="recordingCanvas"
+        width="650"
+        height="500"
+        style="display: none"
+      ></canvas>
+    </div>
+
+    <script>
+      // Variable declarations
+      let mediaRecorder;
+      let recordedChunks = [];
+      let stream;
+      let isRecording = false;
+      let isPaused = false;
+      let postureData = [];
+      let recordingStartTime = 0;
+      let shouldSaveAndRedirect = false; // Flag to control save and redirect behavior
+      let camera; // Store camera reference
+      let pose; // Store pose reference
+      let cameraActive = false; // Track if camera is running
+
+      const videoElement = document.getElementById("videoElement");
+      const overlayCanvas = document.getElementById("overlayCanvas");
+      const recordingCanvas = document.getElementById("recordingCanvas");
+      const overlayCtx = overlayCanvas.getContext("2d");
+      const recordingCtx = recordingCanvas.getContext("2d");
+
+      let postureStatus = "";
+      let confidenceScore = 0;
+      let processingComplete = false;
+      let isStopped = false;
+      let showOverlay = false; // New flag to control overlay visibility
+
+      console.log("Body Language Analyzer initialized");
+
+      // Initialize MediaPipe Pose
+      function initializePose() {
+        console.log("Initializing MediaPipe Pose");
+        pose = new Pose({
+          locateFile: (file) =>
+            `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`,
+        });
+        pose.setOptions({
+          modelComplexity: 1,
+          smoothLandmarks: true,
+          minDetectionConfidence: 0.5,
+          minTrackingConfidence: 0.5,
+        });
+        pose.onResults(onResults);
+        console.log("MediaPipe Pose initialized successfully");
+      }
+
+      // Initialize camera
+      function initializeCamera() {
+        if (cameraActive) {
+          console.log("Camera already active, stopping before reinitializing");
+          stopCamera();
+        }
+
+        console.log("Initializing camera");
+        camera = new Camera(videoElement, {
+          onFrame: async () => {
+            if (!isStopped) {
+              const now = Date.now();
+              if (now - lastDetectionTime >= detectionInterval) {
+                await pose.send({ image: videoElement });
+                lastDetectionTime = now;
+              }
+            }
+          },
+          width: 900,
+          height: 500,
+        });
+
+        camera
+          .start()
+          .then(() => {
+            cameraActive = true;
+            console.log("Camera initialized and started");
+          })
+          .catch((error) => {
+            console.error("Error starting camera:", error);
+          });
+      }
+
+      // Stop camera
+      function stopCamera() {
+        if (camera) {
+          try {
+            camera.stop();
+            cameraActive = false;
+            console.log("Camera stopped");
+          } catch (error) {
+            console.error("Error stopping camera:", error);
+          }
+        }
+      }
+
+      // Toggle overlay visibility
+      function toggleOverlay(show) {
+        showOverlay = show;
+        if (!show) {
+          // Clear the overlay if hiding
+          overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+        }
+        console.log(`Overlay visibility set to: ${show}`);
+      }
+
+      // Initial setup
+      initializePose();
+      let lastDetectionTime = 0;
+      const detectionInterval = 100; // ms
+      initializeCamera();
+
+      // Function to draw overlay (joints and text)
+      function drawOverlay(ctx, landmarks, postureStatus, confidenceScore) {
+        drawConnectors(ctx, landmarks, POSE_CONNECTIONS, {
+          color: "white",
+          lineWidth: 4,
+        });
+        drawLandmarks(ctx, landmarks, { color: "white", lineWidth: 2 });
+
+        const x = 10;
+        const y = 30;
+        ctx.font = "20px Arial";
+        const text1 = `Posture: ${postureStatus}`;
+        const text2 = `Confidence: ${confidenceScore.toFixed(2)}`;
+        const width1 = ctx.measureText(text1).width;
+        const width2 = ctx.measureText(text2).width;
+        const maxWidth = Math.max(width1, width2);
+
+        ctx.fillStyle = "black";
+        ctx.fillRect(x - 5, y - 20, maxWidth + 10, 50);
+        ctx.fillStyle = "yellow";
+        ctx.fillText(text1, x, y);
+        ctx.fillText(text2, x, y + 25);
+      }
+
+      // Function to save posture data with timestamp
+      function savePostureData() {
+        if (isRecording && !isPaused && !isStopped) {
+          const currentTime = (Date.now() - recordingStartTime) / 1000; // Time in seconds
+          console.log(
+            `Saving posture data at timestamp ${currentTime.toFixed(
+              1
+            )}s: ${postureStatus} (confidence: ${confidenceScore.toFixed(2)})`
+          );
+          postureData.push({
+            timestamp: currentTime.toFixed(1),
+            posture: postureStatus,
+            confidence: confidenceScore.toFixed(2),
+          });
+        }
+      }
+
+      // Process posture detection results
+      function onResults(results) {
+        if (!isStopped) {
+          if (isRecording && !isPaused) {
+            recordingCtx.drawImage(
+              videoElement,
+              0,
+              0,
+              recordingCanvas.width,
+              recordingCanvas.height
+            );
+
+            if (results.poseLandmarks) {
+              const landmarks = results.poseLandmarks;
+              const leftShoulder = landmarks[11];
+              const rightShoulder = landmarks[12];
+              const leftHip = landmarks[23];
+              const rightHip = landmarks[24];
+              const nose = landmarks[0];
+
+              const shoulderMid = {
+                x: (leftShoulder.x + rightShoulder.x) / 2,
+                y: (leftShoulder.y + rightShoulder.y) / 2,
+              };
+              const hipMid = {
+                x: (leftHip.x + rightHip.x) / 2,
+                y: (leftHip.y + rightHip.y) / 2,
+              };
+              const spineVector = {
+                x: hipMid.x - shoulderMid.x,
+                y: hipMid.y - shoulderMid.y,
+              };
+              const spineAngle =
+                Math.acos(
+                  spineVector.y /
+                    Math.sqrt(spineVector.x ** 2 + spineVector.y ** 2)
+                ) *
+                (180 / Math.PI);
+              const shoulderWidth = Math.abs(leftShoulder.x - rightShoulder.x);
+              const headOffset =
+                Math.abs(nose.x - shoulderMid.x) / shoulderWidth;
+
+              console.log(
+                `Posture metrics - Spine angle: ${spineAngle.toFixed(
+                  2
+                )}°, Head offset: ${headOffset.toFixed(2)}`
+              );
+
+              if (spineAngle < 5 && headOffset < 0.1) {
+                postureStatus = "good";
+              } else if (spineAngle < 10 && headOffset < 0.2) {
+                postureStatus = "okay";
+              } else {
+                postureStatus = "bad";
+              }
+
+              confidenceScore =
+                [leftShoulder, rightShoulder, leftHip, rightHip, nose].reduce(
+                  (sum, lm) => sum + lm.visibility,
+                  0
+                ) / 5;
+
+              savePostureData();
+              drawOverlay(
+                recordingCtx,
+                landmarks,
+                postureStatus,
+                confidenceScore
+              );
+            }
+          }
+
+          // Only show overlay when showOverlay flag is true
+          overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+          if (showOverlay && results.poseLandmarks) {
+            drawOverlay(
+              overlayCtx,
+              results.poseLandmarks,
+              postureStatus,
+              confidenceScore
+            );
+          }
+        }
+      }
+
+      // Function to process posture data
+      function processPostureData(rawData) {
+        console.log(`Processing ${rawData.length} posture data points`);
+        if (rawData.length === 0) return { summary: { totalTime: 0 } };
+
+        const secondsData = {};
+        let goodTime = 0;
+        let okayTime = 0;
+        let badTime = 0;
+        let totalConfidence = 0;
+
+        rawData.forEach((entry) => {
+          const second = Math.floor(parseFloat(entry.timestamp));
+          if (!secondsData[second]) {
+            secondsData[second] = {
+              postures: { good: 0, okay: 0, bad: 0 },
+              confidenceSum: 0,
+              sampleCount: 0,
+            };
+          }
+          secondsData[second].postures[entry.posture]++;
+          secondsData[second].confidenceSum += parseFloat(entry.confidence);
+          secondsData[second].sampleCount++;
+          totalConfidence += parseFloat(entry.confidence);
+        });
+
+        const secondsReport = {};
+        Object.keys(secondsData).forEach((second) => {
+          const data = secondsData[second];
+          const totalSamples = data.sampleCount;
+          let dominantPosture = "unknown";
+          let maxCount = 0;
+          Object.keys(data.postures).forEach((posture) => {
+            if (data.postures[posture] > maxCount) {
+              maxCount = data.postures[posture];
+              dominantPosture = posture;
+            }
+          });
+          if (dominantPosture === "good") goodTime++;
+          else if (dominantPosture === "okay") okayTime++;
+          else if (dominantPosture === "bad") badTime++;
+
+          secondsReport[second] = {
+            dominantPosture,
+            confidenceAvg: (data.confidenceSum / totalSamples).toFixed(2),
+            samples: totalSamples,
+            postureBreakdown: {
+              good: Math.round((data.postures.good / totalSamples) * 100),
+              okay: Math.round((data.postures.okay / totalSamples) * 100),
+              bad: Math.round((data.postures.bad / totalSamples) * 100),
+            },
+          };
+        });
+
+        const totalTime = Object.keys(secondsReport).length;
+        return {
+          recordingTime: totalTime,
+          secondBySecond: secondsReport,
+          summary: {
+            totalTime,
+            goodTime,
+            okayTime,
+            badTime,
+            goodPercentage:
+              totalTime > 0 ? Math.round((goodTime / totalTime) * 100) : 0,
+            okayPercentage:
+              totalTime > 0 ? Math.round((okayTime / totalTime) * 100) : 0,
+            badPercentage:
+              totalTime > 0 ? Math.round((badTime / totalTime) * 100) : 0,
+            averageConfidence:
+              rawData.length > 0
+                ? (totalConfidence / rawData.length).toFixed(2)
+                : 0,
+          },
+        };
+      }
+
+      // Function to reset recording state
+      function resetRecordingState() {
+        recordedChunks = [];
+        postureData = [];
+        isRecording = false;
+        isPaused = false;
+        isStopped = false;
+        processingComplete = false;
+        toggleOverlay(false); // Hide overlay on reset
+        document.getElementById("startPauseBtn").textContent = "Start";
+        document.getElementById("stopBtn").disabled = true;
+        document.getElementById("status").textContent = "Not Recording";
+        document
+          .getElementById("status")
+          .classList.remove("recording", "loading");
+
+        // Clear canvas
+        overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+        recordingCtx.clearRect(
+          0,
+          0,
+          recordingCanvas.width,
+          recordingCanvas.height
+        );
+
+        if (stream) {
+          stream.getTracks().forEach((track) => track.stop());
+          stream = null;
+        }
+
+        console.log("Recording state reset");
+      }
+
+      // Start/Pause button event listener
+      document
+        .getElementById("startPauseBtn")
+        .addEventListener("click", async () => {
+          if (!isRecording) {
+            console.log("Starting recording");
+
+            // Ensure MediaPipe and camera are initialized
+            if (!cameraActive) {
+              initializeCamera();
+            }
+
+            stream = await navigator.mediaDevices.getUserMedia({
+              video: true,
+              audio: true,
+            });
+            videoElement.srcObject = stream;
+            await new Promise(
+              (resolve) => (videoElement.onloadedmetadata = resolve)
+            );
+            console.log("Media stream acquired");
+
+            const canvasStream = recordingCanvas.captureStream(30);
+            const audioTrack = stream.getAudioTracks()[0];
+            const combinedStream = new MediaStream([
+              ...canvasStream.getVideoTracks(),
+              audioTrack,
+            ]);
+
+            mediaRecorder = new MediaRecorder(combinedStream, {
+              mimeType: "video/webm",
+            });
+            mediaRecorder.ondataavailable = (event) => {
+              if (event.data.size > 0) recordedChunks.push(event.data);
+            };
+
+            mediaRecorder.onstop = async () => {
+              console.log("Recording stopped");
+              if (shouldSaveAndRedirect) {
+                const blob = new Blob(recordedChunks, { type: "video/webm" });
+                const processedData = processPostureData(postureData);
+                console.log("Processed posture data:", processedData);
+                const formData = new FormData();
+                formData.append("video", blob, "recording.webm");
+                const reportBlob = new Blob([JSON.stringify(processedData)], {
+                  type: "application/json",
+                });
+                formData.append("report", reportBlob, "report.json");
+                try {
+                  const response = await fetch("/save_video", {
+                    method: "POST",
+                    body: formData,
+                  });
+                  if (response.ok) {
+                    console.log("Video and report saved successfully");
+                    processingComplete = true;
+                    window.location.href = "/playback";
+                  } else {
+                    console.error("Failed to save video and report");
+                    resetRecordingState();
+                    document.getElementById("status").textContent =
+                      "Failed to save video";
+                  }
+                } catch (error) {
+                  console.error("Error saving video and report:", error);
+                  resetRecordingState();
+                  document.getElementById("status").textContent =
+                    "Error saving video";
+                }
+              } else {
+                resetRecordingState();
+              }
+              recordedChunks = [];
+            };
+
+            mediaRecorder.start();
+            isRecording = true;
+            isPaused = false;
+            isStopped = false;
+            toggleOverlay(true); // Show overlay when starting
+            recordingStartTime = Date.now();
+            document.getElementById("startPauseBtn").textContent = "Pause";
+            document.getElementById("stopBtn").disabled = false;
+            document.getElementById("status").textContent = "Recording";
+            document.getElementById("status").classList.add("recording");
+            console.log("Recording started");
+          } else {
+            if (!isPaused) {
+              mediaRecorder.pause();
+              isPaused = true;
+              toggleOverlay(false); // Hide overlay when paused
+              document.getElementById("startPauseBtn").textContent = "Resume";
+              document.getElementById("status").textContent = "Paused";
+              console.log("Recording paused");
+            } else {
+              mediaRecorder.resume();
+              isPaused = false;
+              toggleOverlay(true); // Show overlay when resumed
+              document.getElementById("startPauseBtn").textContent = "Pause";
+              document.getElementById("status").textContent = "Recording";
+              console.log("Recording resumed");
+            }
+          }
+        });
+
+      // Stop button event listener (modified to freeze video)
+      document.getElementById("stopBtn").addEventListener("click", () => {
+        if (isRecording && !processingComplete) {
+          isStopped = true; // This stops the pose detection
+          toggleOverlay(true); // Keep overlay visible when stopped
+          shouldSaveAndRedirect = true;
+          // We keep the last frame displayed by not clearing the canvas
+
+          // Stop recording but don't reset everything yet
+          mediaRecorder.stop();
+          document.getElementById("status").textContent = "Processing";
+          document
+            .getElementById("status")
+            .classList.add("recording", "loading");
+
+          // Disable buttons during processing
+          document.getElementById("startPauseBtn").disabled = true;
+          document.getElementById("stopBtn").disabled = true;
+        }
+      });
+
+      // Start Again button event listener (simplified to just reload the page)
+      document.getElementById("startAgainBtn").addEventListener("click", () => {
+        // Force page reload for a completely fresh start
+        window.location.reload();
+      });
+    </script>
+  </body>
+</html>

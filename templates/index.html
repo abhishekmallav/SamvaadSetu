@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SamvaadSetu - Master Your Communication</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/index.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="header">
+        <div class="header-logo">
+          <img
+            src="/static/images/logo.png"
+            alt="SamvaadSetu Logo"
+            class="logo-image"
+          />
+          <a href="{{ url_for('index') }}">SamvaadSetu</a>
+        </div>
+        <div class="header-menu">
+          <a href="{{ url_for('index') }}"> Home</a>
+          <a href="{{ url_for('about') }}">About Us</a>
+
+          <a href="{{ url_for('playback') }}">
+            <p id="insights">
+              <i class="fa-duotone fa-solid fa-chart-simple"></i> Insights
+            </p>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-section">
+        <h1>Master Your Communication</h1>
+        <p>
+          AI-powered platform for enhancing your presentation and communication
+          skills
+        </p>
+        <p class="slogan">Speak Inclusive, Captivate Exclusive</p>
+        <button
+          class="btn btn-primary"
+          onclick="window.location.href='{{ url_for('practise') }}'"
+        >
+          Start Practice
+        </button>
+      </div>
+
+      <div class="features">
+        <div class="card">
+          <h3>Real-Time Analysis</h3>
+          <p>
+            Obtain real-time analysis of your nonverbal communication, including
+            facial expressions, body language, and posture
+          </p>
+        </div>
+        <div class="card">
+          <h3>Performance Tracking</h3>
+          <p>
+            Access comprehensive analytics and receive personalized insights
+            from AI to monitor your progress effectively
+          </p>
+        </div>
+        <div class="card">
+          <h3>Multilingual Support</h3>
+          <p>( Currently Under Development )</p>
+          <p>Practice and receive feedback in multiple languages</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>&copy; 2025 SamvaadSetu. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="{{ url_for('about') }}">About</a>
+          <a href="{{ url_for('contact') }}">Contact</a>
+          <a href="{{ url_for('terms') }}">Terms of Service</a>
+          <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+          <a href="{{ url_for('support') }}">Support</a>
+          <a href="{{ url_for('faqs') }}">FAQs</a>
+          <a href="{{ url_for('careers') }}">Careers</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+/* About Page Styles */
+.about-content {
+    max-width: 800px;
+    margin: 4rem auto;
+    padding: 3rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .about-content h1 {
+    font-size: 2.5rem;
+    color: #1f2937;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .about-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #4b5563;
+    margin-bottom: 2rem;
+  }
+  
+  .team-section {
+    margin-top: 3rem;
+  }
+  
+  .team-section h2 {
+    color: #1f2937;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #4f46e5;
+  }
+  
+  .team-section ul {
+    list-style-type: none;
+    padding-left: 0;
+    display: grid;
+    gap: 1rem;
+  }
+  
+  .team-section li {
+    margin: 0.5rem 0;
+    color: #4b5563;
+    padding: 1rem;
+    background-color: #f3f4f6;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .team-section li:hover {
+    transform: translateX(10px);
+    background-color: #e5e7eb;
+  }
+  

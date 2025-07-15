@@ -1,0 +1,177 @@
+body {
+  background-color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: Ubuntu;
+  margin: 0;
+}
+
+.container-fluid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: white;
+  box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
+}
+
+.header-logo {
+  display: flex;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #4f46e5;
+}
+.header-logo a {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+}
+.logo-image {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+.header-menu {
+  display: flex;
+  gap: 20px;
+}
+.header-menu i {
+  margin-right: 10px;
+}
+.header-menu a {
+  font-size: 1.3rem;
+  font-weight: 550;
+  color: #6e7988;
+  text-decoration: none;
+  transition: transform 0.3s ease-in-out, color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.header-menu a:hover {
+  color: #1f2937;
+  transform: scale(1.1);
+}
+
+#insights {
+  font-size: 1.4rem;
+  color: white;
+  background-color: #4f46e5;
+  text-decoration: none;
+  transition: transform 0.3s ease-in-out, color 0.2s;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  border: 1px solid;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+#insights:hover {
+  color: white;
+  background-color: #4338ca;
+  transform: scale(1.0125);
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.video-container {
+  /* background: rgb(158, 158, 158); */
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  
+}
+
+#videoElement {
+  border-radius: 10px;
+  box-shadow: rgba(14, 63, 126, 0.06) 0px 0px 0px 1px, rgba(42, 51, 70, 0.03) 0px 1px 1px -0.5px, rgba(42, 51, 70, 0.04) 0px 2px 2px -1px, rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px, rgba(42, 51, 70, 0.03) 0px 5px 5px -2.5px, rgba(42, 51, 70, 0.03) 0px 10px 10px -5px, rgba(42, 51, 70, 0.03) 0px 24px 24px -8px;
+}
+
+
+
+#recording-status {
+  text-align: center;
+  width: 200px;
+  align-items: center;
+}
+.controls {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#videoElement {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+button {
+  font-size: 16px;
+  font-weight: 600;
+  padding: 10px 20px;
+  margin: 10px;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #4338ca;
+}
+.recording {
+  color: red;
+  font-weight: bold;
+}
+/* Added style for loading animation */
+.loading::after {
+  content: " ⏳"; /* Simple loading indicator; could use CSS animation */
+  animation: spin 1s infinite linear;
+}
+@keyframes spin {
+  0% {
+    content: " ⏳";
+  }
+  33% {
+    content: " ⌛";
+  }
+  66% {
+    content: " ⏳";
+  }
+}
+
+.footer {
+  background-color: #1f2937;
+  color: white;
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.footer-links {
+  display: flex;
+  gap: 15px;
+}
+.footer a {
+  color: #9ca3af;
+  text-decoration: none;
+}
+.footer a:hover {
+  color: #ffffff;
+}

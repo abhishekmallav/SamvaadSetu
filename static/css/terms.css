@@ -1,0 +1,49 @@
+/* Terms of Service Page Styles */
+.terms-content {
+    max-width: 800px;
+    margin: 4rem auto;
+    padding: 3rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .terms-content h1 {
+    font-size: 2.5rem;
+    color: #1f2937;
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+  
+  .terms-section {
+    margin-bottom: 2rem;
+  }
+  
+  .terms-section h2 {
+    color: #1f2937;
+    font-size: 1.5rem;
+    margin: 2rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #4f46e5;
+  }
+  
+  .terms-section p {
+    color: #4b5563;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+  
+  .terms-section ul {
+    list-style-type: disc;
+    padding-left: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .terms-section li {
+    color: #4b5563;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 0.5rem;
+  }
+  
