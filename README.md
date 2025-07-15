@@ -175,7 +175,7 @@ SamvaadSetu/
 
 ![](/media/natalie/D-Drive/VS-Code/SamvaadSetu/images/1747319430847.jpeg) 
 
-![](/media/natalie/D-Drive/VS-Code/SamvaadSetu/images/1747319440017.gif)
+<img src="file:///media/natalie/D-Drive/VS-Code/SamvaadSetu/images/1747319440017.gif" title="" alt="" data-align="center">
 
 ![](/home/natalie/VS-Code/SamvaadSetu/images/1747319431424.jpeg)
 
